@@ -1,25 +1,23 @@
 :-consult('utilities').
 
-% For each property instance of each zone:
-% If there are one or more heads, only their requests are mediated.
-% If one or more owners of the room are present, only their requests are mediated.
-% Otherwise all requests are mediated.
-
+% mediateRequests/2  for each pair (Zone, PropertyInstance) obtains users' requests, 
+% averages them and then applies policies based on the propertyInstance and various environmental parameters.
 mediateRequests([],[]).
 mediateRequests([(Z,PI,Ls)|Reqs], MediatedReqs) :-
-    mediatePI(Z,PI,Ls,Mediated),
+    mediatePI(Z,PI,Ls,Mediated), % mediate the requests
     mediateRequests(Reqs, OtherMediatedReqs),
     append(Mediated, OtherMediatedReqs, MediatedReqs).
 
 mediatePI(_,_,[],[]).
 mediatePI(Z, PI, Ls, [(Z, PI, Avg)]) :-
-    findall(V, (member((V,U),Ls), user(U,Zones), member(Z,Zones)), Values),
-    zone(Z, Policy),
+    findall(V, (member((V,U),Ls), user(U,Zones), member(Z,Zones)), Values), % get values
+    zone(Z, Policy), % get the zone policy
     avg(Values,AvgTmp),
     % department-wise policy
     propertyInstance(Z, PI, Prop, _, _),
-    findValue(Policy, Prop, AvgTmp, Avg).
- 
+    findValue(Policy, Prop, AvgTmp, Avg). % apply some environmental policies
+
+
 findValue(_, temp, TempValue, Value) :-
     season(S),
     % eco-policy
@@ -45,8 +43,8 @@ findValue(west, light, LightValue, Value) :-
 selectActionsForPI(_, _, V, ActuatorList, _, Actions) :-
     length(ActuatorList, ActuatorsNumber),
     triggerAllActuators(V, ActuatorsNumber, ActuatorList, Actions).
-triggerAllActuators(_, _, [], []).
 
+triggerAllActuators(_, _, [], []).
 
 triggerAllActuators(V, ActuatorsNumber, [Actuator|ActuatorList], [(Actuator,VNew)|Actions]) :-
     dif(Actuator, heater),

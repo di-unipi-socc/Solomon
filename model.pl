@@ -1,3 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% actuator(AId, Property).
+% sensor(SId, Property).
+% sensorValue(SId, Value).
+
+% zone(ZId, AppliedPolicy).
+% propertyInstance(ZId, PIId, Property, ActuatorsLs, SensorsLs).
+
+% user(UId, AllowedZonesLs).
+% set(UId, ZId, PIId, Value).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Two wings (East, West)
 % Five rooms per wing (4 "individual" 1 shared)
 % Each pair of individual rooms (1&3, 2&4) share the same ac
@@ -9,7 +23,6 @@
 % Each pair has a temp sensor
 % Each common room has a temp sensor and two light sensors
 % Each user has his/her own room
-% u8 is also the head of the Department
 
 daytime(morning).
 weather(sunny).
@@ -73,7 +86,8 @@ sensor(lightRoom_W_4, light).
 sensor(lightCommonRoom_W_1, light).
 sensor(lightCommonRoom_W_2, light).
 
-%zone(ZId, AppliedPolicy)
+
+
 zone(room_E_1, east).
 zone(room_E_2, east).
 zone(room_E_3, east).
@@ -85,6 +99,7 @@ zone(room_W_2, west).
 zone(room_W_3, west).
 zone(room_W_4, west).
 zone(commonRoom_W, west).
+
 
 
 propertyInstance(room_E_1, roomTemp, temp, [acOdd_E, heater], [tempOdd_E]).
@@ -105,7 +120,6 @@ propertyInstance(room_E_3, nightLight, light, [biglightRoom_E_3, smalllightRoom_
 propertyInstance(room_E_4, nightLight, light, [biglightRoom_E_4, smalllightRoom_E_4], [lightRoom_E_4]).
 
 
-
 propertyInstance(room_W_1, roomTemp, temp, [acOdd_W], [tempOdd_W]).
 propertyInstance(room_W_2, roomTemp, temp, [acEven_W], [tempEven_W]).
 propertyInstance(room_W_3, roomTemp, temp, [acOdd_W], [tempOdd_W]).
@@ -124,7 +138,7 @@ propertyInstance(room_W_3, nightLight, light, [biglightRoom_W_3, smalllightRoom_
 propertyInstance(room_W_4, nightLight, light, [biglightRoom_W_4, smalllightRoom_W_4], [lightRoom_W_4]).
 
 
-% user(UId, ZoneList).
+
 user(u1, [room_E_1, commonRoom_E, commonRoom_W]).
 user(u2, [room_E_2, commonRoom_E, commonRoom_W]).
 user(u3, [room_E_3, commonRoom_E, commonRoom_W]).
@@ -134,6 +148,7 @@ user(u5, [room_W_1, commonRoom_E, commonRoom_W]).
 user(u6, [room_W_2, commonRoom_E, commonRoom_W]).
 user(u7, [room_W_3, commonRoom_E, commonRoom_W]).
 user(u8, [room_W_4, commonRoom_E, commonRoom_W]).
+
 
 
 sensorValue(tempOdd_E,22).
@@ -157,6 +172,8 @@ sensorValue(lightRoom_W_3,140).
 sensorValue(lightRoom_W_4,150).
 sensorValue(lightCommonRoom_W_1,160).
 sensorValue(lightCommonRoom_W_2,170).
+
+
 
 set(u1, room_E_1, roomLight, 0).
 set(u1, room_E_1, roomTemp, 18).

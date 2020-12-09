@@ -1,4 +1,3 @@
-
 wellDefinedPropertyInstances :-
     findall((ZId, PId, PropertyType, X, Type), illDefinedPropertyInstance(ZId, PId, PropertyType, X, Type), L),
     ((L==[], ansi_format([bold,fg(blue)],'### Properties instances are all well defined. ###################',[]), nl, true) ;
