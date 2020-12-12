@@ -10,7 +10,7 @@ mediateRequests([(Z,PI,Ls)|Reqs], MediatedReqs) :-
 
 mediatePI(_,_,[],[]).
 mediatePI(Z, PI, Ls, [(Z, PI, Avg)]) :-
-    findall(V, (member((V,U),Ls), user(U,Zones), member(Z,Zones)), Values), % get values
+    findall(V, member((V,_),Ls), Values), % get values
     zone(Z, Policy), % get the zone policy
     avg(Values,AvgTmp),
     % department-wise policy

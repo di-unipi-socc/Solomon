@@ -24,7 +24,7 @@ getRequests(Reqs) :-
 
 % requestsPerPI returns all users' requests for a specific PropertyInstance in a specific Zone
 requestsPerPI(Z, PI, PIReqs) :- 
-    propertyInstance(Z, PI, _, _, _), findall((V, UId),( set(UId, Z, PI, V)), PIReqs).
+    propertyInstance(Z, PI, _, _, _), findall((V, UId),( set(UId, Z, PI, V), user(UId,Zones), member(Z,Zones) ), PIReqs).
 
 % associateActions/2 given a set of (mediated) requests, returns a list of actions of the type (ActuatorId, Value). 
 % To do this, for each mediated request, 
