@@ -2,10 +2,25 @@
 
 % mediateRequests/2  for each pair (Zone, PropertyInstance) obtains users' requests, 
 % averages them and then applies policies based on the propertyInstance and various environmental parameters.
-mediateRequests([],[]).
-mediateRequests([(Z,PI,Ls)|Reqs], MediatedReqs) :-
+
+mediateRequests(Requests, Mediated) :-
+    sort(Requests, Sorted),
+    groupPerPI(Sorted, [], NewRequests),
+    mediateRequest(NewRequests, Mediated).
+
+groupPerPI([],Ls,Ls).
+groupPerPI([(Z,PI,V,U)|Ls], [], NewLs) :-
+    groupPerPI(Ls, [(Z,PI,[(V,U)])], NewLs).
+groupPerPI([(Z,PI,V,U)|Ls], [(Z1,PI1,R)|Rs], NewLs) :-
+    dif(PI,PI1),
+    groupPerPI(Ls, [(Z,PI,[(V,U)]),(Z1,PI1,R)|Rs], NewLs).
+groupPerPI([(Z,PI,V,U)|Ls], [(Z,PI,R)|Rs], NewLs) :-
+    groupPerPI(Ls, [(Z,PI,[(V,U)|R])|Rs], NewLs).
+
+mediateRequest([],[]).
+mediateRequest([(Z,PI,Ls)|Reqs], MediatedReqs) :-
     mediatePI(Z,PI,Ls,Mediated), % mediate the requests
-    mediateRequests(Reqs, OtherMediatedReqs),
+    mediateRequest(Reqs, OtherMediatedReqs),
     append(Mediated, OtherMediatedReqs, MediatedReqs).
 
 mediatePI(_,_,[],[]).
@@ -38,6 +53,22 @@ findValue(west, light, LightValue, Value) :-
         (LightValue > 255, Value is 255; LightValue < 180, Value is 180; Value is LightValue)
     ).
 
+% associateActions/2 given a set of (mediated) requests, returns a list of actions of the type (ActuatorId, Value). 
+% To do this, for each mediated request, 
+% assigns the action to be performed to each actuator of the propertyInstance. 
+% Once all requests have been "rolled out" it checks if an actuator has more than one action assigned 
+% and if so, mediate between those actions.
+associateActions(Requests, ExecutableActions) :-
+    actionsFor(Requests, Actions),             % returns a list of actions (ActuatorId, Value)
+    setActuators(Actions, ExecutableActions).  % [Defined by Admin] determines a single action for each actuator
+
+% actionsFor/2 for each mediated request takes the set of actuators and sensors assigned to the propertyInstance and 
+% for each of them assigns the corresponding action.
+actionsFor([],[]).
+actionsFor([(Z, PI, V)|Reqs], Actions) :-
+    propertyInstance(Z, PI, _, ActuatorList, SensorList),              % given a Zone and its PropertyInstace takes the set of actuators and sensors
+    selectActionsForPI(Z, PI, V, ActuatorList, SensorList, Actions1),  % [Defined by Admin] for each actuator in the PropertyInstance assigns an action (ActuatorId, Value)    
+    actionsFor(Reqs, Actions2), append(Actions1, Actions2, Actions).   % combines these actions with the others
 
 % determineActions defined by SysAdmin (e.g. can use sensor values taken from the 4th param) %%%%%%%%%%%%%%%%%%%%%%%%%
 selectActionsForPI(_, _, V, ActuatorList, _, Actions) :-
