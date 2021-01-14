@@ -8,18 +8,21 @@
 
 react(Requests, MediatedRequests) :- 
     getRequests(Requests, ValidRequests),               % request harvesting (into a list of <A,Z,Pi,V>), discarding invalid requests
-    mediateRequests(ValidRequests, MediatedRequests).
+    mediateRequests(ValidRequests, MediatedRequests),   % [Defined by Admin] determines a list of <Z,Pi,V> such that there is at most one request per Pi
+    validMediation(MediatedRequests),
+    associateActions(MediatedRequests, Actions),        % [Defined by Admin] determines a list of <Actuator,Value> such that there is ...
+    validActions(Actions).
 
 getRequests(Requests, ValidRequests) :-
     findall((ZId, PIId, Value, UId), set(UId, ZId, PIId, Value), Requests),
     findall((ZId, PIId, Value, UId), ( member((ZId, PIId, Value, UId), Requests), user(UId, Zones), member(ZId ,Zones), validRequest(ZId, PIId, Value) ), ValidRequests).
 
-validRequest(_,_,_).
+validRequest(_,_,_). % [Defined by Admin]
 
 validMediation(Reqs) :-                                 % (more) declarative spec, for the article
     sort(Reqs, OrderedReqs),
-    \+( member((Z,PI,V1), OrderedReqs), member((Z,PI,V2), OrderedReqs), dif(V1,V2) ),
-    \+( member((Z,PI,V), OrderedReqs), \+( validRequest(Z,PI,V) ) ).
+    \+( ( member((Z,PI,V1), OrderedReqs), member((Z,PI,V2), OrderedReqs), dif(V1,V2) ) ),
+    \+( ( member((Z,PI,V), OrderedReqs), \+( validRequest(Z,PI,V) ) ) ).
 
 validActions(Actions) :-
     sort(Actions, OrderedActions),
@@ -28,3 +31,5 @@ validActions(Actions) :-
 validActionSequence([]).
 validActionSequence([(_,_)]).
 validActionSequence([(A,V),(X,Y)|L]) :- validValue(A,V), dif(A,X), validActionSequence([(X,Y)|L]).
+
+validValue(_,_). % [Defined by Admin]
