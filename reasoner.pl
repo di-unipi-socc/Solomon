@@ -7,6 +7,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% propertyType(TypeId).
+
 % actuator(AId, Property).
 % sensor(SId, Property).
 % sensorValue(SId, Value).

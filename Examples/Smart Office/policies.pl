@@ -1,4 +1,4 @@
-:- consult('office_infr').
+:- consult('infr').
 :- consult('../../reasoner.pl').
 
 % mediateRequests/2  for each pair (Zone, PropertyInstance) obtains users' requests, 

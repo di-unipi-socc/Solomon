@@ -15,6 +15,13 @@ daytime(morning).
 weather(sunny).
 season(winter).
 
+
+
+propertyType(light).
+propertyType(temp).
+
+
+
 actuator(acOdd_E, temp).
 actuator(acEven_E, temp).
 actuator(acCommonRoom_E, temp).
