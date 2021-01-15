@@ -1,30 +1,20 @@
-:-consult('utilities').
+:- consult('office_infr').
+:- consult('../../reasoner.pl').
 
 % mediateRequests/2  for each pair (Zone, PropertyInstance) obtains users' requests, 
 % averages them and then applies policies based on the propertyInstance and various environmental parameters.
 
 mediateRequests(Requests, Mediated) :-
-    sort(Requests, Sorted),
-    groupPerPI(Sorted, [], NewRequests),
+    groupPerPI(Requests, NewRequests),
     mediateRequest(NewRequests, Mediated).
 
-groupPerPI([],Ls,Ls).
-groupPerPI([(Z,PI,V,U)|Ls], [], NewLs) :-
-    groupPerPI(Ls, [(Z,PI,[(V,U)])], NewLs).
-groupPerPI([(Z,PI,V,U)|Ls], [(Z1,PI1,R)|Rs], NewLs) :-
-    dif(PI,PI1),
-    groupPerPI(Ls, [(Z,PI,[(V,U)]),(Z1,PI1,R)|Rs], NewLs).
-groupPerPI([(Z,PI,V,U)|Ls], [(Z,PI,R)|Rs], NewLs) :-
-    groupPerPI(Ls, [(Z,PI,[(V,U)|R])|Rs], NewLs).
-
 mediateRequest([],[]).
-mediateRequest([(Z,PI,Ls)|Reqs], MediatedReqs) :-
-    mediatePI(Z,PI,Ls,Mediated), % mediate the requests
-    mediateRequest(Reqs, OtherMediatedReqs),
-    append(Mediated, OtherMediatedReqs, MediatedReqs).
+mediateRequest([(Z,PI,Ls)|Reqs], [Mediated|OtherMediatedReqs]) :-
+    mediatePI(Z,PI,Ls,Mediated),
+    mediateRequest(Reqs, OtherMediatedReqs).
 
-mediatePI(_,_,[],[]).
-mediatePI(Z, PI, Ls, [(Z, PI, Avg)]) :-
+mediatePI(Z, PI, [], (Z, PI, undefined)).
+mediatePI(Z, PI, Ls, (Z, PI, Avg)) :-
     findall(V, member((V,_),Ls), Values), % get values
     zone(Z, Policy), % get the zone policy
     avg(Values,AvgTmp),
@@ -65,6 +55,9 @@ associateActions(Requests, ExecutableActions) :-
 % actionsFor/2 for each mediated request takes the set of actuators and sensors assigned to the propertyInstance and 
 % for each of them assigns the corresponding action.
 actionsFor([],[]).
+actionsFor([(_, _, undefined)|Reqs], Actions) :-
+    actionsFor(Reqs,Actions).
+
 actionsFor([(Z, PI, V)|Reqs], Actions) :-
     propertyInstance(Z, PI, _, ActuatorList, SensorList),              % given a Zone and its PropertyInstace takes the set of actuators and sensors
     selectActionsForPI(Z, PI, V, ActuatorList, SensorList, Actions1),  % [Defined by Admin] for each actuator in the PropertyInstance assigns an action (ActuatorId, Value)    
@@ -90,4 +83,4 @@ triggerAllActuators(V, ActuatorsNumber, [heater|ActuatorList], [(heater,0)|Actio
 
 % resolveActions defined by SysAdmin, cannot read data from sensors (?) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (will mainly do avg, max, min, mode, cap) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-setActuators(Actions, ExecutableActions) :- setActuatorsWithMax(Actions, -inf ,inf, ExecutableActions).
+setActuators(Actions, ExecutableActions) :- setActuatorsWithMax(Actions, -inf,inf, ExecutableActions).

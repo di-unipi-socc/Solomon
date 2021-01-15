@@ -1,3 +1,23 @@
+getZonePIPairs(Pairs) :- findall((ZId, PIId), (zone(ZId,_), propertyInstance(ZId,PIId,_,_,_)), Ls), sort(Ls,Pairs).
+
+getActuators(Actuators) :- findall((A), actuator(A,_), Ls), sort(Ls, Actuators).
+
+filterRequests(ZId, PIId, Requests, Ls) :- findall((Value, UId), member((ZId, PIId, Value, UId), Requests), Ls).
+
+filterActions(A, Actions, Ls) :- findall((Value), member((A,Value), Actions), Ls).
+
+groupPerPI(Requests, SortedGroups) :- 
+    getZonePIPairs(Pairs), 
+    findall((ZId,PIId,Ls) ,( member((ZId,PIId),Pairs), filterRequests(ZId, PIId, Requests, Ls) ),Groups), 
+    sort(Groups,SortedGroups).
+
+groupPerActuator(Actions, SortedGroups) :- 
+    getActuators(Actuators), 
+    findall((A,Ls) ,( member(A, Actuators), filterActions(A, Actions, Ls) ),Groups), 
+    sort(Groups,SortedGroups).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % setActuatorWith[Max/Min/Avg/Mode](Actions, Min, Max, ExecutableActions)
 %   - Actions: list of (Actuator, Value)
 %   - Min: minimum allowed value

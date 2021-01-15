@@ -1,17 +1,3 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% actuator(AId, Property).
-% sensor(SId, Property).
-% sensorValue(SId, Value).
-
-% zone(ZId, AppliedPolicy).
-% propertyInstance(ZId, PIId, Property, ActuatorsLs, SensorsLs).
-
-% user(UId, AllowedZonesLs).
-% set(UId, ZId, PIId, Value).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % Two wings (East, West)
 % Five rooms per wing (4 "individual" 1 shared)
 % Each pair of individual rooms (1&3, 2&4) share the same ac
@@ -23,6 +9,7 @@
 % Each pair has a temp sensor
 % Each common room has a temp sensor and two light sensors
 % Each user has his/her own room
+% There are three environmental parameters: Daytime, Wheather, Season
 
 daytime(morning).
 weather(sunny).
@@ -175,20 +162,25 @@ sensorValue(lightCommonRoom_W_2,170).
 
 
 
+% room_E_1 = {roomLight:0; roomTemp:18}
 set(u1, room_E_1, roomLight, 0).
 set(u1, room_E_1, roomTemp, 18).
 
+% room_E_3 = {roomLight:255; roomTemp:28}
 set(u3, room_E_3, roomLight, 255).
 set(u3, room_E_3, roomTemp, 28).
 
 
+% u4 unauthorized to enter room_E_2
 set(u4, room_E_2, roomLight, 0).
 set(u4, room_E_2, roomTemp, 18).
 
+% u6 unauthorized to enter room_E_2
 set(u6, room_E_2, roomLight, 255).
 set(u6, room_E_2, roomTemp, 28).
 
 
+% commonRoom_E = {commonRoomLight:{100,100,255}(avg:151.666..); commonRoomTemp:{18,23,28}(avg:23)}
 set(u2, commonRoom_E, commonRoomLight, 100).
 set(u2, commonRoom_E, commonRoomTemp, 18).
 
