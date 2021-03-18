@@ -26,7 +26,9 @@ react(Requests, MediatedRequests, Actions) :-
     mediateRequests(ValidRequests, MediatedRequests),   % [Defined by Admin] determines a list of <Z,Pi,V> such that there is at most one request per Pi
     validMediation(MediatedRequests),
     associateActions(MediatedRequests, Actions),         % [Defined by Admin] determines a list of <Actuator,Value> such that there is ...
-    validActions(Actions).
+    validActions(Actions),
+    writeln(MediatedRequests),
+    writeln(Actions).
 
 getRequests(Requests, ValidRequests) :-
     findall((ZId, PIId, Value, UId), set(UId, ZId, PIId, Value), Requests),

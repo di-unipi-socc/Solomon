@@ -13,7 +13,6 @@ mediateRequest([(Z,PI,Ls)|Reqs], [Mediated|OtherMediatedReqs]) :-
     mediatePI(Z,PI,Ls,Mediated),
     mediateRequest(Reqs, OtherMediatedReqs).
 
-mediatePI(Z, PI, [], (Z, PI, undefined)).
 mediatePI(Z, PI, Ls, (Z, PI, Avg)) :-
     findall(V, member((V,_),Ls), Values), % get values
     avg(Values,Avg).
@@ -31,21 +30,21 @@ associateActions(Requests, ExecutableActions) :-
 % actionsFor/2 for each mediated request takes the set of actuators and sensors assigned to the propertyInstance and 
 % for each of them assigns the corresponding action.
 actionsFor([],[]).
-actionsFor([(_, _, undefined)|Reqs], Actions) :-
-    actionsFor(Reqs,Actions).
-
 actionsFor([(Z, PI, V)|Reqs], Actions) :-
     propertyInstance(Z, PI, _, ActuatorList, SensorList),              % given a Zone and its PropertyInstace takes the set of actuators and sensors
     selectActionsForPI(Z, PI, V, ActuatorList, SensorList, Actions1),  % [Defined by Admin] for each actuator in the PropertyInstance assigns an action (ActuatorId, Value)    
     actionsFor(Reqs, Actions2), append(Actions1, Actions2, Actions).   % combines these actions with the others
 
 % determineActions defined by SysAdmin (e.g. can use sensor values taken from the 4th param) %%%%%%%%%%%%%%%%%%%%%%%%%
-selectActionsForPI(_, _, V, ActuatorList, _, Actions) :-
-    triggerOneActuator(V, ActuatorList, Actions).
+selectActionsForPI(_, _, V, Actuators, _, Actions):-
+    length(Actuators, L),
+    triggerAll(V, L, Actuators, Actions).
 
-triggerOneActuator(_, [], []).
-triggerOneActuator(V, [Actuator|_], [(Actuator,V)]).
+triggerAll(_, _, [], []).
+triggerAll(V, L, [A|Actuators], [(A,VNew)|Actions]):-
+    VNew is V/L,
+    triggerAll(V, L, Actuators, Actions).
 
 % resolveActions defined by SysAdmin, cannot read data from sensors (?) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % (will mainly do avg, max, min, mode, cap) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-setActuators(Actions, ExecutableActions) :- setActuatorsWithMode(Actions, 0, 100, ExecutableActions).
+setActuators(Actions, ExecutableActions) :- setActuatorsWithMax(Actions, 0, 100, ExecutableActions).

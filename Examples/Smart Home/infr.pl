@@ -1,37 +1,43 @@
 % Sample data: static %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % propertyType(TypeId).
 propertyType(light).
+propertyType(temp).
 
 % actuator(AId, TypeId).
-actuator(wardrobeLight1, light).
-actuator(bedLight1, light).
-actuator(mainLight1,   light).
-actuator(cornerLight1,   light).
+
+actuator(smallLight, light).
+actuator(mainLight, light).
+actuator(cornerLight, light).
+
+actuator(ac, temp).
 
 % sensor(SId, TypeId).
-sensor(brightness1,  light).
+sensor(brightness, light).
+sensor(temperature, temp).
 
 % zone(ZId, AppliedPolicy).
-zone(bedroom, _).
+zone(livingroom, _).
 
 % propertyInstance(ZoneId, PropertyInstanceId, PropertyType, ListOfActuators, ListOfSensors)
-propertyInstance(bedroom, morningLight,   light,  [wardrobeLight1],                          [brightness1]).
-propertyInstance(bedroom, nightLight,     light,  [bedLight1],                               [brightness1]).
-propertyInstance(bedroom, movieLight,     light,  [cornerLight1, bedLight1],                 [brightness1]).
-propertyInstance(bedroom, workLight,      light,  [cornerLight1, mainLight1],                [brightness1]).
-propertyInstance(bedroom, cleaningLight,  light,  [mainLight1],                              [brightness1]).
-propertyInstance(bedroom, dinnerLight,    light,  [cornerLight1, bedLight1, wardrobeLight1], [brightness1]).
+propertyInstance(livingroom, studyingLight, light, [cornerLight, mainLight], [brightness]).
+propertyInstance(livingroom, movieLight, light, [cornerLight, smallLight], [brightness]).
+propertyInstance(livingroom, readingLight, light, [smallLight], [brightness]).
+
+propertyInstance(livingroom, roomTemp, temp, [ac], [temperature]).
 
 % user(UId, AllowedZonesLs).
-user(u1, [bedroom]).
-user(u2, [bedroom]).
+user(alice, [livingroom]).
+user(bob, [livingroom]).
 
 % Sample data: dynamic %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % sensorValue(SId, Value).
-sensorValue(brightness, 20). % out of 100
+sensorValue(brightness, 20). % out of 255
+sensorValue(temperature, 22). % degrees centigrade
 
 % set(UId, ZId, PIId, Value).
-set(u1, bedroom, movieLight, 50).
-set(u1, bedroom, nightLight, 100).
-set(u2, bedroom, movieLight, 10).
+set(alice, livingroom, movieLight, 20).
+set(bob, livingroom, studyingLight, 80).
+
+set(alice, livingroom, roomTemp, 20).
+set(bob, livingroom, roomTemp, 26).

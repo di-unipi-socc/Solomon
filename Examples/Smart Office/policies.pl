@@ -13,17 +13,18 @@ mediateRequest([(Z,PI,Ls)|Reqs], [Mediated|OtherMediatedReqs]) :-
     mediatePI(Z,PI,Ls,Mediated),
     mediateRequest(Reqs, OtherMediatedReqs).
 
-mediatePI(Z, PI, [], (Z, PI, undefined)).
+mediatePI(_, _, [], undef).
 mediatePI(Z, PI, Ls, (Z, PI, Avg)) :-
     findall(V, member((V,_),Ls), Values), % get values
     zone(Z, Policy), % get the zone policy
     avg(Values,AvgTmp),
     % department-wise policy
-    propertyInstance(Z, PI, Prop, _, _),
-    findValue(Policy, Prop, AvgTmp, Avg). % apply some environmental policies
+    propertyInstance(Z, PI, Prop, _, [Sensor]),
+    sensorValue(Sensor, SensedValue),
+    findValue(Policy, Prop, SensedValue, AvgTmp, Avg). % apply some environmental policies
 
 
-findValue(_, temp, TempValue, Value) :-
+findValue(_, temp, _, TempValue, Value) :-
     season(S),
     % eco-policy
     (
@@ -32,13 +33,12 @@ findValue(_, temp, TempValue, Value) :-
         ((S = summer ; S = spring), (TempValue > 28, Value is 28; TempValue < 24, Value is 24; Value is TempValue))
     ).
 
-findValue(east, light, LightValue, Value) :-
+findValue(east, light, _, LightValue, Value) :-
     (LightValue > 255, Value is 255; LightValue < 100, Value is 100; Value is LightValue).
 
-findValue(west, light, LightValue, Value) :-
-    weather(W),
+findValue(west, light, Brightness, LightValue, Value) :-
     (
-        (W = sunny, (LightValue > 255, Value is 255; LightValue < 100, Value is 100; Value is LightValue))
+        (Brightness > 100, (LightValue > 255, Value is 255; LightValue < 100, Value is 100; Value is LightValue))
         ;
         (LightValue > 255, Value is 255; LightValue < 180, Value is 180; Value is LightValue)
     ).
@@ -55,9 +55,8 @@ associateActions(Requests, ExecutableActions) :-
 % actionsFor/2 for each mediated request takes the set of actuators and sensors assigned to the propertyInstance and 
 % for each of them assigns the corresponding action.
 actionsFor([],[]).
-actionsFor([(_, _, undefined)|Reqs], Actions) :-
-    actionsFor(Reqs,Actions).
-
+actionsFor([undef|Reqs], Actions) :-
+    actionsFor(Reqs, Actions).
 actionsFor([(Z, PI, V)|Reqs], Actions) :-
     propertyInstance(Z, PI, _, ActuatorList, SensorList),              % given a Zone and its PropertyInstace takes the set of actuators and sensors
     selectActionsForPI(Z, PI, V, ActuatorList, SensorList, Actions1),  % [Defined by Admin] for each actuator in the PropertyInstance assigns an action (ActuatorId, Value)    

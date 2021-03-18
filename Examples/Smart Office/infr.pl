@@ -66,7 +66,7 @@ sensor(lightRoom_E_1, light).
 sensor(lightRoom_E_2, light).
 sensor(lightRoom_E_3, light).
 sensor(lightRoom_E_4, light).
-sensor(lightCommonRoom_E_1, light).
+sensor(lightCommonRoom_E, light).
 sensor(lightCommonRoom_E_2, light).
 
 sensor(tempOdd_W, temp).
@@ -77,7 +77,7 @@ sensor(lightRoom_W_1, light).
 sensor(lightRoom_W_2, light).
 sensor(lightRoom_W_3, light).
 sensor(lightRoom_W_4, light).
-sensor(lightCommonRoom_W_1, light).
+sensor(lightCommonRoom_W, light).
 sensor(lightCommonRoom_W_2, light).
 
 
@@ -106,7 +106,7 @@ propertyInstance(room_E_1, roomLight, light, [biglightRoom_E_1, smalllightRoom_E
 propertyInstance(room_E_2, roomLight, light, [biglightRoom_E_2, smalllightRoom_E_2], [lightRoom_E_2]).
 propertyInstance(room_E_3, roomLight, light, [biglightRoom_E_3, smalllightRoom_E_3], [lightRoom_E_3]).
 propertyInstance(room_E_4, roomLight, light, [biglightRoom_E_4, smalllightRoom_E_4], [lightRoom_E_4]).
-propertyInstance(commonRoom_E, commonRoomLight, light, [biglightCommonRoom_E_1, biglightCommonRoom_E_2], [lightCommonRoom_E_1, lightCommonRoom_E_2]).
+propertyInstance(commonRoom_E, commonRoomLight, light, [biglightCommonRoom_E_1, biglightCommonRoom_E_2], [lightCommonRoom_E]).
 
 propertyInstance(room_E_1, nightLight, light, [biglightRoom_E_1, smalllightRoom_E_1], [lightRoom_E_1]).
 propertyInstance(room_E_2, nightLight, light, [biglightRoom_E_2, smalllightRoom_E_2], [lightRoom_E_2]).
@@ -124,7 +124,7 @@ propertyInstance(room_W_1, roomLight, light, [biglightRoom_W_1, smalllightRoom_W
 propertyInstance(room_W_2, roomLight, light, [biglightRoom_W_2, smalllightRoom_W_2], [lightRoom_W_2]).
 propertyInstance(room_W_3, roomLight, light, [biglightRoom_W_3, smalllightRoom_W_3], [lightRoom_W_3]).
 propertyInstance(room_W_4, roomLight, light, [biglightRoom_W_4, smalllightRoom_W_4], [lightRoom_W_4]).
-propertyInstance(commonRoom_W, commonRoomLight, light, [biglightCommonRoom_W_1, biglightCommonRoom_W_2], [lightCommonRoom_W_1, lightCommonRoom_W_2]).
+propertyInstance(commonRoom_W, commonRoomLight, light, [biglightCommonRoom_W_1, biglightCommonRoom_W_2], [lightCommonRoom_W]).
 
 propertyInstance(room_W_1, nightLight, light, [biglightRoom_W_1, smalllightRoom_W_1], [lightRoom_W_1]).
 propertyInstance(room_W_2, nightLight, light, [biglightRoom_W_2, smalllightRoom_W_2], [lightRoom_W_2]).
@@ -153,7 +153,7 @@ sensorValue(lightRoom_E_1,100).
 sensorValue(lightRoom_E_2,120).
 sensorValue(lightRoom_E_3,200).
 sensorValue(lightRoom_E_4,0).
-sensorValue(lightCommonRoom_E_1,80).
+sensorValue(lightCommonRoom_E,80).
 sensorValue(lightCommonRoom_E_2,160).
 
 sensorValue(tempOdd_W,24).
@@ -164,35 +164,16 @@ sensorValue(lightRoom_W_1,110).
 sensorValue(lightRoom_W_2,120).
 sensorValue(lightRoom_W_3,140).
 sensorValue(lightRoom_W_4,150).
-sensorValue(lightCommonRoom_W_1,160).
+sensorValue(lightCommonRoom_W,160).
 sensorValue(lightCommonRoom_W_2,170).
 
 
-
-% room_E_1 = {roomLight:0; roomTemp:18}
 set(u1, room_E_1, roomLight, 0).
 set(u1, room_E_1, roomTemp, 18).
-
-% room_E_3 = {roomLight:255; roomTemp:28}
-set(u3, room_E_3, roomLight, 255).
 set(u3, room_E_3, roomTemp, 28).
-
-
-% u4 unauthorized to enter room_E_2
 set(u4, room_E_2, roomLight, 0).
 set(u4, room_E_2, roomTemp, 18).
-
-% u6 unauthorized to enter room_E_2
-set(u6, room_E_2, roomLight, 255).
-set(u6, room_E_2, roomTemp, 28).
-
-
-% commonRoom_E = {commonRoomLight:{100,100,255}(avg:151.666..); commonRoomTemp:{18,23,28}(avg:23)}
-set(u2, commonRoom_E, commonRoomLight, 100).
-set(u2, commonRoom_E, commonRoomTemp, 18).
-
-set(u5, commonRoom_E, commonRoomLight, 100).
-set(u5, commonRoom_E, commonRoomTemp, 23).
-
-set(u8, commonRoom_E, commonRoomLight, 255).
-set(u8, commonRoom_E, commonRoomTemp, 28).
+set(u2, commonRoom_W, commonRoomLight, 255).
+set(u2, commonRoom_W, commonRoomTemp, 23).
+set(u8, commonRoom_W, commonRoomLight, 255).
+set(u8, commonRoom_W, commonRoomTemp, 18).
