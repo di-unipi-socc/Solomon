@@ -80,6 +80,8 @@ Finally through `mediateRequests/2` and `associateActions/2` the admin can:
 
 It is also possible to checks that inputs and outputs of each phase are well-formed, through predicates `validMediation/1`, and `validActions/1`.
 
+Solomon also makes sure that the model is well defined through  `checker.pl ` and prints out debug information in case of problems.
+
 ### Running Solomon
 
 To try to perform mediation with the model described above (`SmartHome`), simply query the predicate, in `Examples/SmartHome/policies.pl`:
@@ -92,3 +94,5 @@ MediatedRequests = [(livingroom, movieLight, 20),  (livingroom, readingLight, 0)
 Actions = [(ac, 23),  (cornerLight, 40),  (mainLight, 40),  (smallLight, 10)].
 ```
 where `Requests` is the list of all users' requests, `MediatedRequests` the list containing the target states for each propertyInstance and `Actions` is the list of the actions to perform to reach the final target state.
+
+It is possible to notice how immediately after opening the file the message "Properties instances are all well defined." will show us that the model we are going to use is well defined.
