@@ -2,6 +2,14 @@
 
 Solomon is a declarative open-source framework to represent smart environments, user-set goals and customisable mediation policies to reconcile contrasting (user and/or global) goals and relative actuator settings, encompassing multiple IoT systems.
 
+Solomon is described in the following article:
+
+> [Giuseppe Bisicchia](), [Stefano Forti](http://pages.di.unipi.it/forti), [Antonio Brogi](http://pages.di.unipi.it/brogi)<br>
+> [**A Declarative Goal-oriented Framework for Smart Environments with LPaaS**](http://ceur-ws.org/Vol-3002/paper3.pdf), <br>	
+> *Proceedings of the 36th Italian Conference on Computational Logic, Parma, Italy, September 7-9, 2021*
+
+If you wish to reuse source code in this repo, please consider citing it.
+
 ## Background & Requirements
 
 Solomon is written in Prolog. Prolog is a logic programming language as it is based on first-order logic. A Prolog program is a finite set of *clauses* of the form
