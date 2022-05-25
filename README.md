@@ -10,14 +10,6 @@ Solomon, our previous work, is described in the following article:
 
 If you wish to reuse source code in this repo, please consider citing it.
 
-Solomon is described in the following article:
-
-> [Giuseppe Bisicchia](), [Stefano Forti](http://pages.di.unipi.it/forti), [Antonio Brogi](http://pages.di.unipi.it/brogi)<br>
-> [**A Declarative Goal-oriented Framework for Smart Environments with LPaaS**](http://ceur-ws.org/Vol-3002/paper3.pdf), <br>	
-> *Proceedings of the 36th Italian Conference on Computational Logic, Parma, Italy, September 7-9, 2021*
-
-If you wish to reuse source code in this repo, please consider citing it.
-
 ## Background & Requirements
 
 Solomon++ is written in Prolog. Prolog is a logic programming language as it is based on first-order logic. A Prolog program is a finite set of *clauses* of the form
@@ -42,7 +34,7 @@ Even after reconciling the previous types of conflicts into one target state sat
 * Determine the correct configuration for each actuator acting on that state, and 
 * Mediate between any conflicting configurations that a single actuator possibly receives.
 
-Solomon++ tames the effects of the aforementioned types of conflict by allowing to flexibly specify *ad-hoc* energy-aware mediation policies for distinct zones of a smart environment and possible conflicting settings of target actuators. Such policies can resolve conflicts among users' goals, among users' and system administrator's goals, and on actuators configuration. Solomon++ finally enables setting sustainability objectives through the integration of energy-aware optimisation policies for the settings of the actuators. Last, but not least, the declarative nature of Solomon++ makes it easy to write, maintain and extend arbitrary mediation policies encompassing multiple IoT verticals.
+Solomon++ tames the effects of the aforementioned types of conflict by allowing to flexibly specify *ad-hoc* energy-aware mediation policies for distinct zones of a smart environment and possible conflicting settings of target actuators. Such policies can resolve conflicts among users' goals, among users' and system administrator's goals, and on actuators configuration. Solomon++ also enables setting sustainability objectives through the integration of energy-aware optimisation policies for the settings of the actuators. Last, but not least, the declarative nature of Solomon++ makes it easy to write, maintain and extend arbitrary mediation policies encompassing multiple IoT verticals.
 
 ## Quickstart Example
 
@@ -95,7 +87,7 @@ propertyInstance(livingroom, roomTemp, temp, [ac], [temperature]).
 
 #### Model Users and Goals
 
-Given a user, we define the zones in which she\he is authorized to set goals and we can declare an arbitrary set of roles which defines the capabilities and rights of that user.
+Given a user, we define the zones in which she\he is authorised to set goals and we can also declare an arbitrary set of roles which defines the capabilities and rights of that user.
 
 ```prolog
 user(alice, [home]).
