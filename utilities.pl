@@ -2,7 +2,7 @@ getZonePIPairs(Pairs) :- findall((ZId, PIId), (zone(ZId,_), propertyInstance(ZId
 
 getActuators(Actuators) :- findall((A), actuator(A,_), Ls), sort(Ls, Actuators).
 
-filterRequests(ZId, PIId, Requests, Ls) :- findall((Value, UId), member((ZId, PIId, Value, UId), Requests), Ls).
+filterRequests(ZId, PIId, Requests, Ls) :- findall((Value, UId, URoles), (member((ZId, PIId, Value, UId), Requests), roles(UId, URoles)) Ls).
 
 filterActions(A, Actions, Ls) :- findall((Value), member((A,Value), Actions), Ls).
 
@@ -44,6 +44,8 @@ setActuatorsWithMode(Actions, Min, Max, ExecutableActions) :-
     group(Actions,Partitions),
     getMode(Partitions, Min, Max, ExecutableActions).
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 getAvg([],_,_,[]).
@@ -63,6 +65,23 @@ getMode([P|Partitions], Min, Max, [(K,V2)|Ls]) :-
     applyGreaterThanCap(Mode,Max,V1),
     applySmallerThanCap(V1,Min,V2),
     getMode(Partitions, Min, Max, Ls).
+
+getMedian(List,Median) :-
+    is_list(List), dif(List,[]), 
+    msort(List,SList), length(List,Len),
+    median(SList,Len,Median).
+    
+median(SList,Len,Median) :-
+    Len mod 2 =:= 1, 
+    append3(Low,[Median],_,SList),
+    length(Low,LowLen), div(Len,2)=:=LowLen, !.
+median(SList,Len,Median) :-
+    Len mod 2 =:= 0, 
+    append3(Low,[M1,M2],_,SList),
+    length(Low,LowLen), div(Len,2)=:=LowLen + 1,
+    Median is (M1+M2)/2, !.
+
+append3(L1,L2,L3,L) :- append(L1,L2,T), append(T,L3,L).
 
 applyGreaterThanCap(Value, Cap, Cap) :-
     Value > Cap.
