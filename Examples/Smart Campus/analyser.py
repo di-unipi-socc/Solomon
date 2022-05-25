@@ -13,7 +13,7 @@ colors = {
 
 for scale in ["log", "linear"]:
     for file in files:
-        raw = pd.read_csv('d:/Model/Reasoner/GIOReasoner/Examples/Smart Campus/'+file, names = ["departments", "mediate", "associate", "optimise", "total", "python-time"])
+        raw = pd.read_csv('./'+file, names = ["departments", "mediate", "associate", "optimise", "total", "python-time"])
 
         attrs = ['min', 'max', 'mean', 'std']
 
@@ -26,7 +26,7 @@ for scale in ["log", "linear"]:
         plt.ylabel('Time (s)')
         plt.legend()
         #plt.show()
-        plt.savefig("d:/Model/Reasoner/GIOReasoner/Examples/Smart Campus/graphs/all-"+scale+"."+file+".png")
+        plt.savefig("./graphs/all-"+scale+"."+file+".png")
         plt.clf()
 
         for v in ["mediate", "associate", "optimise", "total"]:
@@ -38,5 +38,5 @@ for scale in ["log", "linear"]:
             plt.ylabel('Time (s)')
             plt.legend()
             #plt.show()
-            plt.savefig("d:/Model/Reasoner/GIOReasoner/Examples/Smart Campus/graphs/"+v+"-"+scale+"."+file+".png")
+            plt.savefig(."/graphs/"+v+"-"+scale+"."+file+".png")
             plt.clf()
